@@ -5,7 +5,8 @@
          (only-in racket/gui/base play-sound))
 
 
-;;; Constants
+;;; constants
+
 (define N-SIZE 20)
 (define B-SIZE 60)
 (define N-COLOR "green")
@@ -13,13 +14,15 @@
 (define BG (circle B-SIZE "solid" B-COLOR))
 
 
-;;; Data
+;;; data
+
 (struct timer (m s) #:mutable #:transparent)
 
 
-;;; Functions
+;;; functions
 
 ;; timer -> timer
+
 (define (tick-tock t)
   (cond [(and (>= (timer-m t) 0) (> (timer-s t) 0))
          (set-timer-s! t (- (timer-s t) 1)) t]
@@ -30,6 +33,7 @@
         [else t]))
 
 ;; timer -> image
+
 (define (render t)
   (overlay (text (string-append (number->string (timer-m t))
                                 ":"
@@ -38,15 +42,20 @@
            BG))
 
 ;; timer keyevent -> timer
+
 (define (key-handle t k)
   (cond [(key=? k "r") (set-timer-m! t 30) (set-timer-s! t 0) t]
         [else t]))
+
+;; entry point
 
 (define main
   (big-bang (timer 30 0)
             (to-draw render)
             (on-tick tick-tock 1)
             (on-key key-handle)))
+
+;; unit tests
 
 (module+ test
   (require rackunit)
