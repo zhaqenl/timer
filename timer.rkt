@@ -6,7 +6,6 @@
 
 
 ;;; constants
-
 (define N-SIZE 20)
 (define B-SIZE 60)
 (define N-COLOR "green")
@@ -15,14 +14,11 @@
 
 
 ;;; data
-
 (struct timer (m s) #:mutable #:transparent)
 
 
 ;;; functions
-
-;; timer -> timer
-
+;;; timer -> timer
 (define (tick-tock t)
   (cond [(and (>= (timer-m t) 0) (> (timer-s t) 0))
          (set-timer-s! t (- (timer-s t) 1)) t]
@@ -33,7 +29,6 @@
         [else t]))
 
 ;; timer -> image
-
 (define (render t)
   (overlay (text (string-append (number->string (timer-m t))
                                 ":"
@@ -41,22 +36,19 @@
                  N-SIZE N-COLOR)
            BG))
 
-;; timer keyevent -> timer
-
+;;; timer keyevent -> timer
 (define (key-handle t k)
   (cond [(key=? k "r") (set-timer-m! t 30) (set-timer-s! t 0) t]
         [else t]))
 
-;; entry point
-
+;;; entry point
 (define main
   (big-bang (timer 30 0)
             (to-draw render)
             (on-tick tick-tock 1)
             (on-key key-handle)))
 
-;; unit tests
-
+;;; unit tests
 (module+ test
   (require rackunit)
   (check-equal? (tick-tock (timer 30 0)) (timer 29 59))
