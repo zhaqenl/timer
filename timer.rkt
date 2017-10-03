@@ -7,10 +7,11 @@
 
 ;;; constants
 (define N-SIZE 20)
-(define B-SIZE 60)
-(define N-COLOR "green")
+(define WIDTH 75)
+(define HEIGHT 27)
+(define N-COLOR "white")
 (define B-COLOR "black")
-(define BG (circle B-SIZE "solid" B-COLOR))
+(define BG (rectangle WIDTH HEIGHT "solid" B-COLOR))
 
 
 ;;; data
@@ -47,6 +48,7 @@
             (to-draw render)
             (on-tick tick-tock 1)
             (on-key key-handle)))
+
 
 ;;; unit tests
 (module+ test
