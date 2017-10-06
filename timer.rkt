@@ -1,9 +1,16 @@
 #lang racket
 
+
+;;;-------------------------------------------------------------------------------------------------
+;;; requires
+
 (require 2htdp/universe)
 (require 2htdp/image
          (only-in racket/gui/base play-sound))
 
+
+;;;-------------------------------------------------------------------------------------------------
+;;; variables
 
 ;;; constants
 (define N-SIZE 20)
@@ -14,22 +21,26 @@
 (define BG (rectangle WIDTH HEIGHT "solid" B-COLOR))
 (define PAUSED? #t)
 
-
-;;; data
+;;; structure
 (struct timer (m s) #:mutable #:transparent)
 
 
+;;;-------------------------------------------------------------------------------------------------
 ;;; functions
+
 ;;; timer -> timer
 (define (tick-tock t)
-  (cond [PAUSED? t]
-        [(and (>= (timer-m t) 0) (> (timer-s t) 0))
-         (set-timer-s! t (- (timer-s t) 1)) t]
-        [(and (> (timer-m t) 0) (<= (timer-s t) 0))
-         (set-timer-m! t (- (timer-m t) 1)) (set-timer-s! t 59) t]
-        [(and (= (timer-m t) 0) (= (timer-s t) 0))
-         (play-sound "alert.wav" #t) t]
-        [else t]))
+  (let ([time-m (timer-m t)]
+        [time-s (timer-s t)])
+    (cond [PAUSED? t]
+          [(and (>= time-m 0) (> time-s 0))
+           (set-timer-s! t (- time-s 1)) t]
+          [(and (> time-m 0) (<= time-s 0))
+           (set-timer-m! t (- time-m 1))
+           (set-timer-s! t 59) t]
+          [(and (= time-m 0) (= time-s 0))
+           (play-sound "alert.wav" #t) t]
+          [else t])))
 
 ;; timer -> image
 (define (render t)
@@ -41,8 +52,11 @@
 
 ;;; timer keyevent -> timer
 (define (key-handle t k)
-  (cond [(key=? k "r") (set-timer-m! t 30) (set-timer-s! t 0) t]
-        [(key=? k "p") (set! PAUSED? (not PAUSED?)) t]
+  (cond [(key=? k "r")
+         (set-timer-m! t 30)
+         (set-timer-s! t 0) t]
+        [(key=? k "p")
+         (set! PAUSED? (not PAUSED?)) t]
         [else t]))
 
 ;;; entry point
@@ -51,7 +65,6 @@
             (to-draw render)
             (on-tick tick-tock 1)
             (on-key key-handle)))
-
 
 ;;; unit tests
 (module+ test
