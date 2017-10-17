@@ -14,7 +14,7 @@
 
 ;;; constants
 (define N-SIZE 20)
-(define WIDTH 115)
+(define WIDTH 135)
 (define HEIGHT 27)
 (define N-COLOR "green")
 (define B-COLOR "black")
@@ -104,3 +104,4 @@
                                               " PC: "
                                               (number->string P-COUNT))
                                N-SIZE N-COLOR) BG)))
+
