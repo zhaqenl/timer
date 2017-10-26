@@ -43,17 +43,17 @@
           [(and (= time-m 0) (= time-s 0))
            (cond [(and (equal? REST? #f) (< P-COUNT 4)) (set! P-COUNT (+ P-COUNT 1))
                                                         (play-sound "alert.wav" #t)
-                                                        (set! REST? #t)                   
                                                         (set! N-COLOR "red")
+                                                        (set! REST? #t)
                                                         (timer 5 0)]
-                 [(and (equal? REST? #t) (<= P-COUNT 4)) (set! REST? #f)
-                                                         (play-sound "alert.wav" #t)
+                 [(and (equal? REST? #t) (<= P-COUNT 4)) (play-sound "alert.wav" #t)
                                                          (set! N-COLOR "green")
+                                                         (set! REST? #f)
                                                          (timer 25 0)]
                  [(and (equal? REST? #f) (= P-COUNT 4)) (set! P-COUNT 0)
                                                         (play-sound "alert.wav" #t)
-                                                        (set! REST? #t)
                                                         (set! N-COLOR "red")
+                                                        (set! REST? #t)
                                                         (timer 25 0)])]
           [else t])))
 
@@ -71,6 +71,7 @@
 (define (key-handle t k)
   (cond [(key=? k "r")
          (set! PAUSED? #t)
+         (set! REST? #f)
          (set! N-COLOR "green")
          (set! P-COUNT 0)
          (timer 25 0)]
